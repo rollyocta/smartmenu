@@ -1,0 +1,294 @@
+/********************************************** ProductCard.css */
+
+.product-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Para pantay ang taas ng lahat ng card sa grid */
+    border: 1px solid #f0f0f0;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.image-container {
+    width: 100%;
+    height: 180px; /* Standard height para sa lahat ng images */
+    background-color: #f9f9f9;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Hindi maba-banat ang kape */
+}
+
+.product-details {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Kinukuha ang space para laging nasa baba ang footer */
+}
+
+.product-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 15px 0;
+    text-align: center;
+    line-height: 1.4;
+    min-height: 2.8em; /* Reserve space para sa 2 lines ng text */
+}
+
+.product-footer {
+    margin-top: auto; /* Dikit sa pinakababa ng details */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid #f5f5f5;
+}
+
+.product-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #6f4e37; /* Coffee brown */
+    margin: 0;
+}
+
+.add-button {
+    background-color: #6f4e37;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.add-button:hover {
+    background-color: #563a29;
+}
+
+.add-button:active {
+    transform: scale(0.95);
+}
+
+
+/********************************************** ProductModal.css */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Mas madilim na overlay */
+    backdrop-filter: blur(3px); /* Blur effect sa background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 20px;
+    padding: 25px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close-x {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #999;
+    cursor: pointer;
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modal-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0;
+}
+
+.section-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.size-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-size-btn {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px solid #eee;
+    background: #fdfaf7;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modal-size-btn.active {
+    border-color: #6f4e37;
+    background: #6f4e37;
+    color: white;
+}
+
+.s-name { font-weight: 600; font-size: 0.9rem; }
+.s-price { font-size: 0.8rem; opacity: 0.9; }
+
+.quantity-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    background: #f9f9f9;
+    padding: 10px 15px;
+    border-radius: 12px;
+}
+
+.qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.qty-controls button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.qty-controls input {
+    width: 40px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.confirm-btn {
+    width: 100%;
+    padding: 14px;
+    background: #6f4e37;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.confirm-btn:hover { background: #563a29; }
+.confirm-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+/* Floating Toast Notification */
+.success-toast-floating {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px); /* Nakatago sa itaas */
+    background-color: #28a745; /* Success Green */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.success-toast-floating.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.check-icon {
+    background: white;
+    color: #28a745;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.75rem;
+}
+
+/* Success Button State */
+.confirm-btn.btn-success {
+    background-color: #28a745;
+    cursor: default;
+}
+
+/* Animation para sa image kapag success */
+.modal-image {
+    transition: transform 0.3s ease;
+}
+
+.success-toast-floating.show ~ .modal-content .modal-image {
+    transform: scale(1.1);
+}
+
+
+/************************************************* style of Product Grid */
+.product-grid {
+    display: grid;
+    /* Auto-adjust base sa screen size */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 20px;
+}

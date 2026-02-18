@@ -1,0 +1,95 @@
+/* Navbar.css */
+
+.navbar {
+    background-color: #F5E6D3; /* Light cream/beige */
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(111, 78, 55, 0.1);
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo Design */
+.nav-logo {
+    text-decoration: none;
+}
+
+.nav-logo h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #D2691E; /* Cinnamon Orange */
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.nav-logo h1 span {
+    color: #6f4e37; /* Coffee Brown */
+    font-weight: 300;
+}
+
+/* Cart Icon & Badge */
+.nav-cart-link {
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.cart-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.cart-icon {
+    width: 28px;
+    height: 28px;
+    color: #6f4e37;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #e74c3c; /* Red alert */
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #F5E6D3; /* Para humiwalay sa icon */
+}
+
+/* Badge Bounce Animation */
+.nav-cart-link.bump {
+    transform: scale(1.2);
+}
+
+.nav-cart-link.bump .cart-badge {
+    animation: bounce 0.3s ease-in-out;
+}
+
+@keyframes bounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.5); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .nav-logo h1 {
+        font-size: 1.2rem;
+    }
+}

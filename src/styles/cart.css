@@ -1,0 +1,227 @@
+/********************************************** Cart.css */
+
+.cart-page-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.cart-title {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #6f4e37;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* Layout for Items and Summary */
+.cart-content {
+    display: grid;
+    grid-template-columns: 1fr 350px; /* 350px para sa summary sidebar */
+    gap: 30px;
+    align-items: start;
+}
+
+.cart-items-list {
+    background: white;
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* Order Summary Box */
+.cart-summary {
+    background: #fff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 20px;
+    border: 1px solid #eee;
+}
+
+.cart-summary h3 {
+    margin-top: 0;
+    color: #6f4e37;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    color: #555;
+    font-weight: 500;
+}
+
+.summary-row.total {
+    font-size: 1.3rem;
+    color: #333;
+    font-weight: 700;
+    margin-top: 15px;
+}
+
+.free-tag {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #6f4e37;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
+
+.checkout-btn:hover {
+    background-color: #563a29;
+}
+
+/* Empty State */
+.empty-cart {
+    text-align: center;
+    padding: 50px;
+    background: white;
+    border-radius: 15px;
+}
+
+.continue-shopping {
+    display: inline-block;
+    margin-top: 15px;
+    color: #6f4e37;
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid #6f4e37;
+    padding: 8px 20px;
+    border-radius: 8px;
+}
+
+/* Responsive: Isang column na lang kapag mobile */
+@media (max-width: 850px) {
+    .cart-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .cart-summary {
+        position: static;
+    }
+}
+
+
+/******************************************* CartItem.css */
+
+.cart-items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.cart-item-row {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #fff;
+    border-radius: 12px;
+    transition: background 0.2s;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cart-item-row:last-child {
+    border-bottom: none;
+}
+
+.cart-item-image {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    margin-right: 15px;
+}
+
+.cart-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.item-name {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.item-size-tag {
+    display: inline-block;
+    font-size: 0.8rem;
+    color: #6f4e37;
+    background: #f5e6d3;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 4px;
+}
+
+.item-qty {
+    margin: 5px 0 0 0;
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.cart-item-actions {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.item-subtotal {
+    margin: 0;
+    font-weight: 700;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.remove-btn:hover {
+    color: #c0392b;
+}
+
+/* Responsive adjust for mobile */
+@media (max-width: 480px) {
+    .cart-item-row {
+        padding: 10px;
+    }
+    .cart-item-image {
+        width: 50px;
+        height: 50px;
+    }
+    .item-name {
+        font-size: 0.95rem;
+    }
+}

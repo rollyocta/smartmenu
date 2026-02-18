@@ -1,0 +1,62 @@
+/* CategoryTabs.css */
+
+.tabs-wrapper {
+    width: 100%;
+    margin-bottom: 30px;
+    padding: 10px 0;
+    /* Soft shadow sa ilalim para may depth */
+    border-bottom: 1px solid #eee;
+}
+
+.tabs-container {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto; /* Enable horizontal scroll */
+    padding: 5px 20px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* Smooth scroll sa iOS */
+}
+
+/* Itago ang scrollbar pero functional pa rin */
+.tabs-container::-webkit-scrollbar {
+    display: none;
+}
+.tabs-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.tab-item {
+    white-space: nowrap; /* Hindi bababa ang text */
+    padding: 10px 24px;
+    border-radius: 50px; /* Pill shape */
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #F5E6D3;
+    color: #5D4037;
+}
+
+.tab-item:hover {
+    background-color: #ede0cf;
+    transform: translateY(-2px);
+}
+
+.tab-item.active {
+    background-color: #D2691E;
+    color: white;
+    box-shadow: 0 4px 12px rgba(210, 105, 30, 0.3);
+}
+
+.tab-item:active {
+    transform: scale(0.95);
+}
+
+/* Desktop spacing adjustment */
+@media (min-width: 768px) {
+    .tabs-container {
+        justify-content: center; /* Center tabs sa malalaking screen */
+    }
+}
