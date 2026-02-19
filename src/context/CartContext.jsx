@@ -1,13 +1,26 @@
 // src/context/CartContext.jsx
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 
+// 1️⃣ Create context
 export const CartContext = createContext();
 
+// 2️⃣ Cart provider
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
 
+  // Load cart from localStorage on init
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  // Save cart to localStorage whenever cartItems change
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  // Add item to cart
   const addToCart = (product, selectedSize, quantity) => {
-    // Check if same product & size already exists
+
     const existingIndex = cartItems.findIndex(
       (item) =>
         item.product.id === product.id &&
@@ -26,17 +39,21 @@ export const CartProvider = ({ children }) => {
         { product, selectedSize, quantity }
       ]);
     }
+
   };
 
+  // Remove item from cart
   const removeFromCart = (index) => {
     setCartItems(cartItems.filter((_, i) => i !== index));
   };
 
+  // Clear all items
   const clearCart = () => setCartItems([]);
 
+  // Calculate total
   const total = cartItems.reduce(
     (acc, item) =>
-      acc + (item.selectedSize ? item.selectedSize.price : item.product.price) * item.quantity,
+      acc + (item.selectedSize?.price || item.product.price) * item.quantity,
     0
   );
 
@@ -48,3 +65,6 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
+
+// 3️⃣ Custom hook para magamit sa kahit anong component
+export const useCart = () => useContext(CartContext);

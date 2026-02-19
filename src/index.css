@@ -16,3 +16,8 @@
   --light-text-color: #FFFFFF;
   --card-radius: 0.5rem;
 }
+
+main {
+  width: min(1200px, 90%);
+  margin: 0 auto;
+}
