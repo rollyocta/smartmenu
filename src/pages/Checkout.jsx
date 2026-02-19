@@ -10,7 +10,6 @@ const Checkout = () => {
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
 
-  // Redirect to Menu page kung walang laman ang cart
   useEffect(() => {
     if (cartItems.length === 0) {
       navigate("/");
@@ -18,155 +17,99 @@ const Checkout = () => {
   }, [cartItems, navigate]);
 
   const handlePlaceOrder = () => {
-    // 1. Validation: Siguraduhing may pangalan at number
     if (!customerName || !phone) {
-      alert("Paki-fill up ang lahat ng required fields (Name at Phone).");
+      alert("Paki-fill up ang Name at Phone Number.");
       return;
     }
 
-    // 2. Format the Message (Maayos na listahan para sa Messenger inbox)
-    let messageText = `🛒 *NEW ORDER ALERT!*%0A%0A`;
-    messageText += `*Customer Details:*%0A`;
-    messageText += `👤 Name: ${customerName}%0A`;
-    messageText += `📞 Phone: ${phone}%0A`;
-    if (notes) messageText += `📝 Notes: ${notes}%0A`;
-
-    messageText += `%0A*Order Summary:*%0A`;
-
+    // 1. Format ng Message (Clean & Readable)
+    let orderSummary = `ORDER FORM\n`;
+    orderSummary += `Name: ${customerName}\n`;
+    orderSummary += `Phone: ${phone}\n`;
+    if (notes) orderSummary += `Notes: ${notes}\n\n`;
+    
+    orderSummary += `ITEMS:\n`;
     cartItems.forEach((item) => {
       const size = item.selectedSize?.size || "";
       const price = item.selectedSize?.price || item.product.price;
-      messageText += `• ${item.product.name} ${size ? `(${size})` : ""} x${item.quantity} = ₱${price * item.quantity}%0A`;
+      orderSummary += `- ${item.product.name} ${size ? `(${size})` : ""} x${item.quantity} = ₱${price * item.quantity}\n`;
     });
 
-    messageText += `%0A💰 *Total Amount: ₱${total}*`;
+    orderSummary += `\nTOTAL: ₱${total}`;
 
-    // 3. Configuration (Ilagay ang Username mo dito)
+    // 2. CONFIGURATION
     const pageUsername = "smartmenu0"; 
-    
-    // 4. Smart Redirect Logic
+    const encodedMessage = encodeURIComponent(orderSummary);
+
+    // 3. SMART REDIRECT LOGIC
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     if (isMobile) {
-      // MOBILE: Tinatawag ang FB Messenger App Protocol
-      // Ginagamit natin ang 'share' method dahil ito ang pinaka-stable sa pag-pasa ng pre-filled text
-      const messengerAppUrl = `fb-messenger://share/?link=${encodeURIComponent("https://m.me/" + pageUsername)}&text=${messageText}`;
+      /**
+       * MOBILE STRATEGY: 
+       * Imbes na 'share', gagamit tayo ng simplified 'm.me' link.
+       * Sa Android/iOS, ito ang pinaka-reliable para mag-prompt na buksan ang App.
+       */
+      const mobileUrl = `https://m.me/${pageUsername}?text=${encodedMessage}`;
       
-      // Subukang buksan ang App
-      window.location.href = messengerAppUrl;
-
-      // Fallback: Kung walang app o mabagal, bubuksan ang browser version pagkatapos ng 1.5 seconds
-      setTimeout(() => {
-        if (!document.hidden) {
-          window.location.href = `https://m.me/${pageUsername}?text=${messageText}`;
-        }
-      }, 1500);
-
+      // I-trigger ang redirect
+      window.location.href = mobileUrl;
     } else {
-      // DESKTOP: Standard m.me link sa bagong tab
-      const desktopUrl = `https://m.me/${pageUsername}?text=${messageText}`;
+      /**
+       * DESKTOP STRATEGY:
+       * Sa desktop, gumagana ang ?text= parameter nang walang problema.
+       */
+      const desktopUrl = `https://www.messenger.com/t/${pageUsername}/?text=${encodedMessage}`;
       window.open(desktopUrl, "_blank");
     }
 
-    // 5. Clear Cart (May kaunting delay para hindi mag-error ang redirect)
+    // Clear cart after a few seconds
     setTimeout(() => {
       clearCart();
     }, 3000);
   };
 
   return (
-    <div className="checkout-container">
-      <h1 className="checkout-main-title">Complete Your Order</h1>
+    <div className="checkout-container" style={{ padding: '20px', maxWidth: '500px', margin: 'auto' }}>
+      <h2>Complete Your Order</h2>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        <input 
+          placeholder="Full Name" 
+          style={{ padding: '12px' }} 
+          value={customerName} 
+          onChange={(e) => setCustomerName(e.target.value)} 
+        />
+        <input 
+          placeholder="Phone Number" 
+          style={{ padding: '12px' }} 
+          value={phone} 
+          onChange={(e) => setPhone(e.target.value)} 
+        />
+        <textarea 
+          placeholder="Notes" 
+          style={{ padding: '12px', height: '80px' }} 
+          value={notes} 
+          onChange={(e) => setNotes(e.target.value)} 
+        />
 
-      <div className="checkout-grid">
-        {/* Customer Info Section */}
-        <section className="info-section">
-          <h2 className="section-title">Customer Information</h2>
-
-          <div className="input-group">
-            <label>Full Name *</label>
-            <input
-              type="text"
-              placeholder="Juan Dela Cruz"
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="input-group">
-            <label>Phone Number *</label>
-            <input
-              type="text"
-              placeholder="09123456789"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="input-group">
-            <label>Special Notes</label>
-            <textarea
-              placeholder="Less sugar, extra ice, etc..."
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
-          </div>
-        </section>
-
-        {/* Order Summary Section */}
-        <section className="summary-section">
-          <h2 className="section-title">Order Summary</h2>
-
-          <div className="receipt-box">
-            {cartItems.map((item, index) => (
-              <div key={index} className="summary-item">
-                <div>
-                  <span className="item-name">{item.product.name}</span>
-                  <br />
-                  <small className="item-meta">
-                    {item.selectedSize?.size} x {item.quantity}
-                  </small>
-                </div>
-                <div className="item-price">
-                  ₱{(item.selectedSize?.price || item.product.price) * item.quantity}
-                </div>
-              </div>
-            ))}
-
-            <hr className="divider" />
-
-            <div className="total-row">
-              <strong>Total Amount:</strong>
-              <strong className="total-price">₱{total}</strong>
-            </div>
-
-            <button onClick={handlePlaceOrder} className="place-order-btn">
-              Confirm & Order via Messenger 💬
-            </button>
-            
-            <p className="helper-text">
-              *You will be redirected to Facebook Messenger to send your order details.
-            </p>
-          </div>
-        </section>
+        <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px', background: '#f9f9f9' }}>
+          <h4>Total: ₱{total}</h4>
+          <button 
+            onClick={handlePlaceOrder}
+            style={{
+              width: '100%',
+              padding: '15px',
+              backgroundColor: '#0084ff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              fontWeight: 'bold'
+            }}
+          >
+            Confirm via Messenger
+          </button>
+        </div>
       </div>
-
-      {/* Basic Internal CSS (Optional: Move this to your CSS file) */}
-      <style>{`
-        .checkout-container { padding: 20px; max-width: 1000px; margin: auto; }
-        .checkout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        @media (max-width: 768px) { .checkout-grid { grid-template-columns: 1fr; } }
-        .input-group { margin-bottom: 15px; display: flex; flex-direction: column; }
-        .input-group input, .input-group textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px; }
-        .receipt-box { border: 1px solid #eee; padding: 20px; border-radius: 10px; background: #f9f9f9; }
-        .summary-item { display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .total-row { display: flex; justify-content: space-between; font-size: 1.2rem; margin-top: 15px; }
-        .place-order-btn { width: 100%; padding: 15px; background: #0084ff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.3s; }
-        .place-order-btn:hover { background: #0066cc; }
-        .helper-text { font-size: 0.8rem; color: #666; text-align: center; margin-top: 10px; }
-      `}</style>
     </div>
   );
 };
