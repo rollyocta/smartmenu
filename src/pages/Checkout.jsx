@@ -10,6 +10,7 @@ const Checkout = () => {
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
 
+  // Redirect to Menu page kung walang laman ang cart
   useEffect(() => {
     if (cartItems.length === 0) {
       navigate("/");
@@ -17,65 +18,60 @@ const Checkout = () => {
   }, [cartItems, navigate]);
 
   const handlePlaceOrder = () => {
+    // 1. Validation: Siguraduhing may pangalan at number
     if (!customerName || !phone) {
-      alert("Please fill required fields");
+      alert("Paki-fill up ang lahat ng required fields (Name at Phone).");
       return;
     }
 
-    // 1. I-format ang message (Clean version)
-    let messageText = `New Order\n\n`;
-    messageText += `Name: ${customerName}\n`;
-    messageText += `Phone: ${phone}\n`;
-    if (notes) messageText += `Notes: ${notes}\n`;
-    messageText += `\nOrder Details:\n`;
+    // 2. Format the Message (Maayos na listahan para sa Messenger inbox)
+    let messageText = `🛒 *NEW ORDER ALERT!*%0A%0A`;
+    messageText += `*Customer Details:*%0A`;
+    messageText += `👤 Name: ${customerName}%0A`;
+    messageText += `📞 Phone: ${phone}%0A`;
+    if (notes) messageText += `📝 Notes: ${notes}%0A`;
+
+    messageText += `%0A*Order Summary:*%0A`;
 
     cartItems.forEach((item) => {
       const size = item.selectedSize?.size || "";
       const price = item.selectedSize?.price || item.product.price;
-      messageText += `• ${item.product.name} ${size ? `(${size})` : ""} x${item.quantity} = ₱${price * item.quantity}\n`;
+      messageText += `• ${item.product.name} ${size ? `(${size})` : ""} x${item.quantity} = ₱${price * item.quantity}%0A`;
     });
 
-    messageText += `\nTotal: ₱${total}`;
+    messageText += `%0A💰 *Total Amount: ₱${total}*`;
 
-    // 2. I-encode ang message para sa URL
-    const encodedMessage = encodeURIComponent(messageText);
+    // 3. Configuration (Ilagay ang Username mo dito)
     const pageUsername = "smartmenu0"; 
     
-    // 3. Platform Detection Logic
+    // 4. Smart Redirect Logic
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     if (isMobile) {
-      /**
-       * MOBILE STRATEGY: 
-       * Sinusubukan nating i-trigger ang Messenger App gamit ang custom protocol.
-       * Ang 'share' feature ang pinaka-stable para mag-pasa ng text sa mobile.
-       */
-      const messengerAppUrl = `fb-messenger://share/?link=${encodeURIComponent("https://m.me/" + pageUsername)}&text=${encodedMessage}`;
-      const fallbackUrl = `https://m.me/${pageUsername}?text=${encodedMessage}`;
-
+      // MOBILE: Tinatawag ang FB Messenger App Protocol
+      // Ginagamit natin ang 'share' method dahil ito ang pinaka-stable sa pag-pasa ng pre-filled text
+      const messengerAppUrl = `fb-messenger://share/?link=${encodeURIComponent("https://m.me/" + pageUsername)}&text=${messageText}`;
+      
       // Subukang buksan ang App
       window.location.href = messengerAppUrl;
 
-      // Kung walang Messenger app o hindi nag-load, fallback sa browser link after 1 second
+      // Fallback: Kung walang app o mabagal, bubuksan ang browser version pagkatapos ng 1.5 seconds
       setTimeout(() => {
-          if (!document.hidden) {
-              window.location.href = fallbackUrl;
-          }
-      }, 1000);
+        if (!document.hidden) {
+          window.location.href = `https://m.me/${pageUsername}?text=${messageText}`;
+        }
+      }, 1500);
 
     } else {
-      /**
-       * DESKTOP STRATEGY:
-       * Standard m.me link sa bagong tab.
-       */
-      const desktopUrl = `https://m.me/${pageUsername}?text=${encodedMessage}`;
+      // DESKTOP: Standard m.me link sa bagong tab
+      const desktopUrl = `https://m.me/${pageUsername}?text=${messageText}`;
       window.open(desktopUrl, "_blank");
     }
 
-    // Clear cart after a delay to ensure the redirect starts first
+    // 5. Clear Cart (May kaunting delay para hindi mag-error ang redirect)
     setTimeout(() => {
-        clearCart();
-    }, 2000);
+      clearCart();
+    }, 3000);
   };
 
   return (
@@ -83,8 +79,10 @@ const Checkout = () => {
       <h1 className="checkout-main-title">Complete Your Order</h1>
 
       <div className="checkout-grid">
+        {/* Customer Info Section */}
         <section className="info-section">
           <h2 className="section-title">Customer Information</h2>
+
           <div className="input-group">
             <label>Full Name *</label>
             <input
@@ -92,8 +90,10 @@ const Checkout = () => {
               placeholder="Juan Dela Cruz"
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
+              required
             />
           </div>
+
           <div className="input-group">
             <label>Phone Number *</label>
             <input
@@ -101,43 +101,72 @@ const Checkout = () => {
               placeholder="09123456789"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              required
             />
           </div>
+
           <div className="input-group">
             <label>Special Notes</label>
             <textarea
-              placeholder="Less sugar, extra ice..."
+              placeholder="Less sugar, extra ice, etc..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
             />
           </div>
         </section>
 
+        {/* Order Summary Section */}
         <section className="summary-section">
           <h2 className="section-title">Order Summary</h2>
+
           <div className="receipt-box">
             {cartItems.map((item, index) => (
               <div key={index} className="summary-item">
                 <div>
-                  {item.product.name}
+                  <span className="item-name">{item.product.name}</span>
                   <br />
-                  <small>{item.selectedSize?.size} x {item.quantity}</small>
+                  <small className="item-meta">
+                    {item.selectedSize?.size} x {item.quantity}
+                  </small>
                 </div>
-                <div>
+                <div className="item-price">
                   ₱{(item.selectedSize?.price || item.product.price) * item.quantity}
                 </div>
               </div>
             ))}
+
+            <hr className="divider" />
+
             <div className="total-row">
-              <strong>Total:</strong>
-              <strong>₱{total}</strong>
+              <strong>Total Amount:</strong>
+              <strong className="total-price">₱{total}</strong>
             </div>
+
             <button onClick={handlePlaceOrder} className="place-order-btn">
-              Confirm & Place Order (via Messenger)
+              Confirm & Order via Messenger 💬
             </button>
+            
+            <p className="helper-text">
+              *You will be redirected to Facebook Messenger to send your order details.
+            </p>
           </div>
         </section>
       </div>
+
+      {/* Basic Internal CSS (Optional: Move this to your CSS file) */}
+      <style>{`
+        .checkout-container { padding: 20px; max-width: 1000px; margin: auto; }
+        .checkout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 768px) { .checkout-grid { grid-template-columns: 1fr; } }
+        .input-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+        .input-group input, .input-group textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px; }
+        .receipt-box { border: 1px solid #eee; padding: 20px; border-radius: 10px; background: #f9f9f9; }
+        .summary-item { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .total-row { display: flex; justify-content: space-between; font-size: 1.2rem; margin-top: 15px; }
+        .place-order-btn { width: 100%; padding: 15px; background: #0084ff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.3s; }
+        .place-order-btn:hover { background: #0066cc; }
+        .helper-text { font-size: 0.8rem; color: #666; text-align: center; margin-top: 10px; }
+      `}</style>
     </div>
   );
 };
