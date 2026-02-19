@@ -10,6 +10,7 @@ const Checkout = () => {
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
 
+  // Redirect to Menu page if cart is empty
   useEffect(() => {
     if (cartItems.length === 0) {
       navigate("/");
@@ -18,97 +19,121 @@ const Checkout = () => {
 
   const handlePlaceOrder = () => {
     if (!customerName || !phone) {
-      alert("Paki-fill up ang Name at Phone Number.");
+      alert("Please fill required fields");
       return;
     }
 
-    // 1. Format ng Message (Clean & Readable)
-    let orderSummary = `ORDER FORM\n`;
-    orderSummary += `Name: ${customerName}\n`;
-    orderSummary += `Phone: ${phone}\n`;
-    if (notes) orderSummary += `Notes: ${notes}\n\n`;
-    
-    orderSummary += `ITEMS:\n`;
+    // 1. Maayos na format para sa Messenger Inbox
+    let message = `New Order\n\n`;
+    message += `Name: ${customerName}\n`;
+    message += `Phone: ${phone}\n`;
+
+    if (notes) {
+      message += `Notes: ${notes}\n`;
+    }
+
+    message += `\nOrder Details:\n`;
+
     cartItems.forEach((item) => {
       const size = item.selectedSize?.size || "";
       const price = item.selectedSize?.price || item.product.price;
-      orderSummary += `- ${item.product.name} ${size ? `(${size})` : ""} x${item.quantity} = ₱${price * item.quantity}\n`;
+      message += `• ${item.product.name} ${size ? `(${size})` : ""} x${item.quantity} = ₱${price * item.quantity}\n`;
     });
 
-    orderSummary += `\nTOTAL: ₱${total}`;
+    message += `\nTotal: ₱${total}`;
 
     // 2. CONFIGURATION
-    const pageUsername = "smartmenu0"; 
-    const encodedMessage = encodeURIComponent(orderSummary);
+    const pageUsername = "smartmenu0"; // ✅ change to your page username
+    const encodedMessage = encodeURIComponent(message);
+    
+    // 3. SMART LINK LOGIC
+    // Sa mobile, ang m.me link ang pinaka-stable na paraan para i-trigger ang app convo na may pre-filled text.
+    const messengerURL = `https://m.me/${pageUsername}?text=${encodedMessage}`;
 
-    // 3. SMART REDIRECT LOGIC
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     if (isMobile) {
-      /**
-       * MOBILE STRATEGY: 
-       * Imbes na 'share', gagamit tayo ng simplified 'm.me' link.
-       * Sa Android/iOS, ito ang pinaka-reliable para mag-prompt na buksan ang App.
-       */
-      const mobileUrl = `https://m.me/${pageUsername}?text=${encodedMessage}`;
-      
-      // I-trigger ang redirect
-      window.location.href = mobileUrl;
+      // Sa mobile, 'window.location.href' ang mas effective kaysa 'window.open' 
+      // para piliting bumukas ang Messenger App imbes na bagong tab sa browser.
+      window.location.href = messengerURL;
     } else {
-      /**
-       * DESKTOP STRATEGY:
-       * Sa desktop, gumagana ang ?text= parameter nang walang problema.
-       */
-      const desktopUrl = `https://www.messenger.com/t/${pageUsername}/?text=${encodedMessage}`;
-      window.open(desktopUrl, "_blank");
+      // Desktop: Bukas sa bagong tab gaya ng dati.
+      window.open(messengerURL, "_blank");
     }
 
-    // Clear cart after a few seconds
+    // Clear cart after redirect
     setTimeout(() => {
-      clearCart();
-    }, 3000);
+        clearCart();
+    }, 2000);
   };
 
   return (
-    <div className="checkout-container" style={{ padding: '20px', maxWidth: '500px', margin: 'auto' }}>
-      <h2>Complete Your Order</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <input 
-          placeholder="Full Name" 
-          style={{ padding: '12px' }} 
-          value={customerName} 
-          onChange={(e) => setCustomerName(e.target.value)} 
-        />
-        <input 
-          placeholder="Phone Number" 
-          style={{ padding: '12px' }} 
-          value={phone} 
-          onChange={(e) => setPhone(e.target.value)} 
-        />
-        <textarea 
-          placeholder="Notes" 
-          style={{ padding: '12px', height: '80px' }} 
-          value={notes} 
-          onChange={(e) => setNotes(e.target.value)} 
-        />
+    <div className="checkout-container">
+      <h1 className="checkout-main-title">Complete Your Order</h1>
 
-        <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px', background: '#f9f9f9' }}>
-          <h4>Total: ₱{total}</h4>
-          <button 
-            onClick={handlePlaceOrder}
-            style={{
-              width: '100%',
-              padding: '15px',
-              backgroundColor: '#0084ff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              fontWeight: 'bold'
-            }}
-          >
-            Confirm via Messenger
-          </button>
-        </div>
+      <div className="checkout-grid">
+        {/* Customer Info */}
+        <section className="info-section">
+          <h2 className="section-title">Customer Information</h2>
+
+          <div className="input-group">
+            <label>Full Name *</label>
+            <input
+              type="text"
+              placeholder="Juan Dela Cruz"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+            />
+          </div>
+
+          <div className="input-group">
+            <label>Phone Number *</label>
+            <input
+              type="text"
+              placeholder="09123456789"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+
+          <div className="input-group">
+            <label>Special Notes</label>
+            <textarea
+              placeholder="Less sugar, extra ice..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </div>
+        </section>
+
+        {/* Order Summary */}
+        <section className="summary-section">
+          <h2 className="section-title">Order Summary</h2>
+
+          <div className="receipt-box">
+            {cartItems.map((item, index) => (
+              <div key={index} className="summary-item">
+                <div>
+                  {item.product.name}
+                  <br />
+                  {item.selectedSize?.size} x {item.quantity}
+                </div>
+                <div>
+                  ₱{(item.selectedSize?.price || item.product.price) * item.quantity}
+                </div>
+              </div>
+            ))}
+
+            <div className="total-row">
+              <strong>Total:</strong>
+              <strong>₱{total}</strong>
+            </div>
+
+            <button onClick={handlePlaceOrder} className="place-order-btn">
+              Confirm & Place Order
+            </button>
+          </div>
+        </section>
       </div>
     </div>
   );
