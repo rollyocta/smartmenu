@@ -1,11 +1,11 @@
 // src/pages/Menu.jsx
 import { useState, useContext } from "react";
-import { categories } from "../data/categories";
-import { products } from "../data/products";
-import CategoryTabs from "../components/products/CategoryTabs";
-import ProductGrid from "../components/products/ProductGrid";
-import ProductModal from "../components/products/ProductModal";
-import { CartContext } from "../context/CartContext";
+import { categories } from "../data/categories.js";
+import { products } from "../data/products.js";
+import CategoryTabs from "../components/products/CategoryTabs.jsx";
+import ProductGrid from "../components/products/ProductGrid.jsx";
+import ProductModal from "../components/products/ProductModal.jsx";
+import { CartContext } from "../context/CartContext.jsx";
 
 const Menu = () => {
   const { addToCart } = useContext(CartContext);
