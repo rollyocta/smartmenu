@@ -3,7 +3,7 @@ import Menu from "./pages/Menu";
 import Cart from "./pages/Cart";
 import Navbar from "./components/Navbar.jsx";
 import Checkout from "./pages/Checkout.jsx";
-import Footer from "./pages/footer.jsx";
+import Footer from "./pages/Footer.jsx";
 
 function App() {
   return (
