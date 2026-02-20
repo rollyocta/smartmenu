@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import Menu from "./pages/Menu";
 import Cart from "./pages/Cart";
-import Navbar from "./components/Navbar";
-import Checkout from "./pages/Checkout";
-import Footer from "./pages/footer";
+import Navbar from "./components/Navbar.jsx";
+import Checkout from "./pages/Checkout.jsx";
+import Footer from "./pages/footer.jsx";
 
 function App() {
   return (
