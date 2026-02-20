@@ -6,21 +6,24 @@ export const CartContext = createContext();
 
 // 2️⃣ Cart provider
 export const CartProvider = ({ children }) => {
-
-  // Load cart from localStorage on init
+  // Lazy init with localStorage (check if window exists)
   const [cartItems, setCartItems] = useState(() => {
-    const savedCart = localStorage.getItem("cartItems");
-    return savedCart ? JSON.parse(savedCart) : [];
+    if (typeof window !== "undefined") {
+      const savedCart = localStorage.getItem("cartItems");
+      return savedCart ? JSON.parse(savedCart) : [];
+    }
+    return [];
   });
 
-  // Save cart to localStorage whenever cartItems change
+  // Save to localStorage whenever cartItems change (only in browser)
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
   }, [cartItems]);
 
   // Add item to cart
   const addToCart = (product, selectedSize, quantity) => {
-
     const existingIndex = cartItems.findIndex(
       (item) =>
         item.product.id === product.id &&
@@ -34,15 +37,11 @@ export const CartProvider = ({ children }) => {
       setCartItems(updatedCart);
     } else {
       // Add new item
-      setCartItems([
-        ...cartItems,
-        { product, selectedSize, quantity }
-      ]);
+      setCartItems([...cartItems, { product, selectedSize, quantity }]);
     }
-
   };
 
-  // Remove item from cart
+  // Remove item by index
   const removeFromCart = (index) => {
     setCartItems(cartItems.filter((_, i) => i !== index));
   };

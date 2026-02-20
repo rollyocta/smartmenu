@@ -15,6 +15,7 @@ const Checkout = () => {
   const DELIVERY_FEE = 15;
   const grandTotal = orderType === "delivery" ? total + DELIVERY_FEE : total;
 
+  // Redirect to menu if cart is empty
   useEffect(() => {
     if (cartItems.length === 0) {
       navigate("/");
@@ -32,6 +33,7 @@ const Checkout = () => {
       return;
     }
 
+    // Build Messenger message
     let message = `🛎️ NEW ORDER RECEIVED\n\n`;
     message += `━━━━━━━━━━━━━━━━━━━\n`;
     message += `👤 CUSTOMER DETAILS\n`;
@@ -39,14 +41,8 @@ const Checkout = () => {
     message += `Name: ${customerName}\n`;
     message += `Phone: ${phone}\n`;
     message += `Order Type: ${orderType === "pickup" ? "🏪 Pick up" : "🚚 Delivery"}\n`;
-
-    if (orderType === "delivery") {
-      message += `Address: ${address}\n`;
-    }
-
-    if (notes) {
-      message += `Notes: ${notes}\n`;
-    }
+    if (orderType === "delivery") message += `Address: ${address}\n`;
+    if (notes) message += `Notes: ${notes}\n`;
 
     message += `\n━━━━━━━━━━━━━━━━━━━\n`;
     message += `🧾 ORDER SUMMARY\n`;
@@ -64,15 +60,10 @@ const Checkout = () => {
 
     message += `━━━━━━━━━━━━━━━━━━━\n`;
     message += `Subtotal: ₱${total}\n`;
-
-    if (orderType === "delivery") {
-      message += `Delivery Fee: ₱${DELIVERY_FEE}\n`;
-    }
-
+    if (orderType === "delivery") message += `Delivery Fee: ₱${DELIVERY_FEE}\n`;
     message += `💰 TOTAL AMOUNT: ₱${grandTotal}\n`;
     message += `━━━━━━━━━━━━━━━━━━━\n\n`;
-    message += `📅 Please confirm this order.\n`;
-    message += `Thank you!`;
+    message += `📅 Please confirm this order.\nThank you!`;
 
     const pageUsername = "smartmenu0";
     const encodedMessage = encodeURIComponent(message);
@@ -80,21 +71,18 @@ const Checkout = () => {
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-    if (isMobile) {
-      window.location.href = messengerURL;
-    } else {
-      window.open(messengerURL, "_blank");
-    }
+    if (isMobile) window.location.href = messengerURL;
+    else window.open(messengerURL, "_blank");
 
-    setTimeout(() => {
-      clearCart();
-    }, 2000);
+    // Clear cart from context AND localStorage
+    clearCart();
+    if (typeof window !== "undefined") localStorage.removeItem("cartItems");
   };
 
   return (
     <div className="checkout-container">
 
-      {/* NEW: Continue Ordering Button */}
+      {/* Back to Menu */}
       <button
         onClick={() => navigate("/")}
         className="back-to-menu-btn"
@@ -141,7 +129,6 @@ const Checkout = () => {
                 />
                 🛍️ Pick up
               </label>
-
               <label className={orderType === "delivery" ? "active" : ""}>
                 <input
                   type="radio"
@@ -189,7 +176,6 @@ const Checkout = () => {
                     {item.selectedSize?.size} x {item.quantity}
                   </small>
                 </div>
-
                 <div>
                   ₱{(item.selectedSize?.price || item.product.price) * item.quantity}
                 </div>
@@ -201,7 +187,6 @@ const Checkout = () => {
                 <span>Subtotal:</span>
                 <span>₱{total}</span>
               </div>
-
               {orderType === "delivery" && (
                 <div className="summary-row fee">
                   <span>Delivery Fee:</span>
@@ -223,11 +208,9 @@ const Checkout = () => {
             </button>
 
           </div>
-
         </section>
 
       </div>
-
     </div>
   );
 };
