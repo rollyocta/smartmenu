@@ -1,0 +1,73 @@
+.footer {
+    background-color: #1a1a1a; /* Mas madilim para sa premium look */
+    color: #f5e6d3;
+    padding: 30px 20px 20px 20px;
+    text-align: center;
+    border-top: 4px solid #D2691E;
+    margin-top: 60px;
+}
+
+.footer-brand {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #D2691E;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+.schedule-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 40px;
+    flex-wrap: wrap; /* Para hindi masira sa mobile */
+}
+
+.schedule-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.days {
+    font-weight: 700;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.hours {
+    font-size: 0.9rem;
+    color: #bfa58a;
+}
+
+/* All Rights Reserved Section */
+.footer-bottom {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.footer-bottom strong {
+    color: #bbb;
+}
+
+.developer-tag {
+    margin-top: 8px;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.developer-tag span {
+    color: #D2691E;
+    font-weight: bold;
+}
+
+/* Mobile Friendly */
+@media (max-width: 600px) {
+    .schedule-grid {
+        flex-direction: column;
+        gap: 20px;
+    }
+}

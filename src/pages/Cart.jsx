@@ -32,10 +32,6 @@ const Cart = () => {
               <span>Subtotal</span>
               <span>₱{total}</span>
             </div>
-            <div className="summary-row">
-              <span>Delivery Fee</span>
-              <span className="free-tag">FREE</span>
-            </div>
             <hr />
             <div className="summary-row total">
               <span>Total</span>

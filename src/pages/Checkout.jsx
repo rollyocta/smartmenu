@@ -9,8 +9,12 @@ const Checkout = () => {
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
+  const [orderType, setOrderType] = useState("pickup");
+  const [address, setAddress] = useState("");
 
-  // Redirect to Menu page if cart is empty
+  const DELIVERY_FEE = 15;
+  const grandTotal = orderType === "delivery" ? total + DELIVERY_FEE : total;
+
   useEffect(() => {
     if (cartItems.length === 0) {
       navigate("/");
@@ -23,56 +27,85 @@ const Checkout = () => {
       return;
     }
 
-    // 1. Maayos na format para sa Messenger Inbox
-    let message = `New Order\n\n`;
+    if (orderType === "delivery" && !address) {
+      alert("Please enter delivery address");
+      return;
+    }
+
+    let message = `🛎️ NEW ORDER RECEIVED\n\n`;
+    message += `━━━━━━━━━━━━━━━━━━━\n`;
+    message += `👤 CUSTOMER DETAILS\n`;
+    message += `━━━━━━━━━━━━━━━━━━━\n`;
     message += `Name: ${customerName}\n`;
     message += `Phone: ${phone}\n`;
+    message += `Order Type: ${orderType === "pickup" ? "🏪 Pick up" : "🚚 Delivery"}\n`;
+
+    if (orderType === "delivery") {
+      message += `Address: ${address}\n`;
+    }
 
     if (notes) {
       message += `Notes: ${notes}\n`;
     }
 
-    message += `\nOrder Details:\n`;
+    message += `\n━━━━━━━━━━━━━━━━━━━\n`;
+    message += `🧾 ORDER SUMMARY\n`;
+    message += `━━━━━━━━━━━━━━━━━━━\n`;
 
     cartItems.forEach((item) => {
       const size = item.selectedSize?.size || "";
       const price = item.selectedSize?.price || item.product.price;
-      message += `• ${item.product.name} ${size ? `(${size})` : ""} x${item.quantity} = ₱${price * item.quantity}\n`;
+      const subtotal = price * item.quantity;
+
+      message += `• ${item.product.name} ${size ? `(${size})` : ""}\n`;
+      message += `   Qty: ${item.quantity}\n`;
+      message += `   Subtotal: ₱${subtotal}\n\n`;
     });
 
-    message += `\nTotal: ₱${total}`;
+    message += `━━━━━━━━━━━━━━━━━━━\n`;
+    message += `Subtotal: ₱${total}\n`;
 
-    // 2. CONFIGURATION
-    const pageUsername = "smartmenu0"; // ✅ change to your page username
+    if (orderType === "delivery") {
+      message += `Delivery Fee: ₱${DELIVERY_FEE}\n`;
+    }
+
+    message += `💰 TOTAL AMOUNT: ₱${grandTotal}\n`;
+    message += `━━━━━━━━━━━━━━━━━━━\n\n`;
+    message += `📅 Please confirm this order.\n`;
+    message += `Thank you!`;
+
+    const pageUsername = "smartmenu0";
     const encodedMessage = encodeURIComponent(message);
-    
-    // 3. SMART LINK LOGIC
-    // Sa mobile, ang m.me link ang pinaka-stable na paraan para i-trigger ang app convo na may pre-filled text.
     const messengerURL = `https://m.me/${pageUsername}?text=${encodedMessage}`;
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     if (isMobile) {
-      // Sa mobile, 'window.location.href' ang mas effective kaysa 'window.open' 
-      // para piliting bumukas ang Messenger App imbes na bagong tab sa browser.
       window.location.href = messengerURL;
     } else {
-      // Desktop: Bukas sa bagong tab gaya ng dati.
       window.open(messengerURL, "_blank");
     }
 
-    // Clear cart after redirect
     setTimeout(() => {
-        clearCart();
+      clearCart();
     }, 2000);
   };
 
   return (
     <div className="checkout-container">
+
+      {/* NEW: Continue Ordering Button */}
+      <button
+        onClick={() => navigate("/")}
+        className="back-to-menu-btn"
+      >
+        ← Back to Menu
+      </button>
+
       <h1 className="checkout-main-title">Complete Your Order</h1>
 
       <div className="checkout-grid">
-        {/* Customer Info */}
+
         <section className="info-section">
           <h2 className="section-title">Customer Information</h2>
 
@@ -97,6 +130,42 @@ const Checkout = () => {
           </div>
 
           <div className="input-group">
+            <label>Order Type *</label>
+            <div className="radio-group">
+              <label className={orderType === "pickup" ? "active" : ""}>
+                <input
+                  type="radio"
+                  value="pickup"
+                  checked={orderType === "pickup"}
+                  onChange={(e) => setOrderType(e.target.value)}
+                />
+                🛍️ Pick up
+              </label>
+
+              <label className={orderType === "delivery" ? "active" : ""}>
+                <input
+                  type="radio"
+                  value="delivery"
+                  checked={orderType === "delivery"}
+                  onChange={(e) => setOrderType(e.target.value)}
+                />
+                🛵 Delivery
+              </label>
+            </div>
+          </div>
+
+          {orderType === "delivery" && (
+            <div className="input-group">
+              <label>Delivery Address *</label>
+              <textarea
+                placeholder="House number, street, barangay..."
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </div>
+          )}
+
+          <div className="input-group">
             <label>Special Notes</label>
             <textarea
               placeholder="Less sugar, extra ice..."
@@ -104,37 +173,61 @@ const Checkout = () => {
               onChange={(e) => setNotes(e.target.value)}
             />
           </div>
+
         </section>
 
-        {/* Order Summary */}
         <section className="summary-section">
           <h2 className="section-title">Order Summary</h2>
 
           <div className="receipt-box">
+
             {cartItems.map((item, index) => (
               <div key={index} className="summary-item">
                 <div>
-                  {item.product.name}
-                  <br />
-                  {item.selectedSize?.size} x {item.quantity}
+                  {item.product.name}<br />
+                  <small>
+                    {item.selectedSize?.size} x {item.quantity}
+                  </small>
                 </div>
+
                 <div>
                   ₱{(item.selectedSize?.price || item.product.price) * item.quantity}
                 </div>
               </div>
             ))}
 
-            <div className="total-row">
-              <strong>Total:</strong>
-              <strong>₱{total}</strong>
+            <div className="summary-details">
+              <div className="summary-row">
+                <span>Subtotal:</span>
+                <span>₱{total}</span>
+              </div>
+
+              {orderType === "delivery" && (
+                <div className="summary-row fee">
+                  <span>Delivery Fee:</span>
+                  <span>₱{DELIVERY_FEE}</span>
+                </div>
+              )}
             </div>
 
-            <button onClick={handlePlaceOrder} className="place-order-btn">
-              Confirm & Place Order
+            <div className="total-row">
+              <strong>Grand Total:</strong>
+              <strong className="total-price">₱{grandTotal}</strong>
+            </div>
+
+            <button
+              onClick={handlePlaceOrder}
+              className="place-order-btn"
+            >
+              Place Order (via Messenger)
             </button>
+
           </div>
+
         </section>
+
       </div>
+
     </div>
   );
 };
