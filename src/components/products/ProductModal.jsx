@@ -32,7 +32,8 @@ const ProductModal = ({ product, isOpen, onClose, addToCart }) => {
     <div className="modal-overlay" onClick={onClose}>
       {/* Toast Notification sa loob ng Modal Overlay */}
       <div className={`success-toast-floating ${showSuccess ? "show" : ""}`}>
-        <span className="check-icon">✓</span> Added {quantity} {product.name} to cart!
+        {/* <span className="check-icon">✓</span> */}
+         Added {quantity} {product.name} to cart!
       </div>
 
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
