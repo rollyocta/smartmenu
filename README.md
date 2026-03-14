@@ -1,15 +1,28 @@
-# React + Vite 
+## Smart Menu – Digital Menu Solution for Small Businesses
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules. 
+Smart Menu is a digital menu application designed for small businesses such as restaurants, milk tea shops, cafés, and food kiosks. It provides a clean, mobile-friendly interface for customers to browse menu items, helping businesses present their products more effectively and streamline the ordering experience.
 
-Currently, two official plugins are available: 
 
-[@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+##Features
 
-## React Compiler 
+• Browse menu items easily on mobile or desktop
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation). 
+• Categorize items for better navigation (e.g., drinks, meals, specials)
 
-## Expanding the ESLint configuration 
+• Highlight featured items or promotions
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [typescript-eslint](https://typescript-eslint.io) in your project.
+• Optional hero banners for announcements or special offers
+
+• Clean, responsive UI for seamless customer experience
+
+• Easy-to-update menu structure for business owners
+
+
+
+## Technologies Used
+
+• Frontend: React.js, Tailwind CSS
+
+• State Management: React Context / Hooks
+
+• Other Tools: Git for version control
