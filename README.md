@@ -3,7 +3,7 @@
 Smart Menu is a digital menu application designed for small businesses such as restaurants, milk tea shops, cafés, and food kiosks. It provides a clean, mobile-friendly interface for customers to browse menu items, helping businesses present their products more effectively and streamline the ordering experience.
 
 
-##Features
+## Features
 
 • Browse menu items easily on mobile or desktop
 
