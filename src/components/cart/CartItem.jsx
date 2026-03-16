@@ -45,7 +45,7 @@ const CartItem = () => {
 
       {/* NEW: Add More Items Button */}
       <div className="add-more-container">
-        <Link to="/" className="add-more-link">
+        <Link to="/menu" className="add-more-link">
           <span className="plus-icon">+</span> Add More Items
         </Link>
       </div>

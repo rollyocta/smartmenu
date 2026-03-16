@@ -1,0 +1,132 @@
+.home-container {
+    width: 100%;
+    min-height: calc(100vh - 70px); /* Ibinawas ang height ng navbar */
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    overflow: hidden;
+    margin-top: 80px;
+}
+
+.hero-banner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    width: 100%;
+}
+
+.hero-content {
+    flex: 1;
+}
+
+.hero-hi {
+    color: #FF7043;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.hero-main-title {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    color: #2D3436;
+    margin-bottom: 20px;
+}
+
+.hero-main-title span {
+    color: #FF7043; /* Dominant Orange */
+}
+
+.hero-desc {
+    font-size: 1.1rem;
+    color: #636E72;
+    margin-bottom: 40px;
+    max-width: 500px;
+    line-height: 1.6;
+}
+
+/* --- THE ORDER NOW BUTTON --- */
+.order-now-btn {
+    background-color: #FF7043;
+    color: white;
+    border: none;
+    padding: 20px 50px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 25px rgba(255, 112, 67, 0.4);
+}
+
+.order-now-btn span {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.order-now-btn:hover {
+    background-color: #E64A19;
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 15px 30px rgba(255, 112, 67, 0.5);
+}
+
+.order-now-btn:hover span {
+    transform: translateX(8px);
+}
+
+/* --- VISUAL ELEMENTS --- */
+.hero-visual {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.orange-blob {
+    width: 400px;
+    height: 400px;
+    background: linear-gradient(135deg, #FF7043 0%, #FFB38E 100%);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    animation: blobMorph 8s linear infinite;
+}
+
+@keyframes blobMorph {
+    0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+    34% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+    67% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 40%; }
+}
+
+.floating-emoji {
+    position: absolute;
+    font-size: 8rem;
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    50% { transform: translateY(-30px) rotate(10deg); }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+    .hero-banner {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 60px;
+    }
+    .hero-main-title { font-size: 2.8rem; }
+    .hero-desc { margin: 0 auto 30px auto; }
+    .order-now-btn { margin: 0 auto; }
+    .orange-blob { width: 250px; height: 250px; }
+}

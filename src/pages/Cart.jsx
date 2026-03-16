@@ -16,7 +16,7 @@ const Cart = () => {
       {cartItems.length === 0 ? (
         <div className="empty-cart">
           <p>Your cart is empty. Time for some coffee? ☕</p>
-          <a href="/" className="continue-shopping">Continue Shopping</a>
+          <a href="/menu" className="continue-shopping">Continue Shopping</a>
         </div>
       ) : (
         <div className="cart-content">

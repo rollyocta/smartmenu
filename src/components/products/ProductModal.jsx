@@ -47,7 +47,7 @@ const ProductModal = ({ product, isOpen, onClose, addToCart }) => {
         <div className="modal-body">
           {product.sizes && (
             <div className="size-group">
-              <p className="section-label">Select Size:</p>
+              <p className="section-label">Choose:</p>
               <div className="size-options">
                 {product.sizes.map((sizeObj) => (
                   <button

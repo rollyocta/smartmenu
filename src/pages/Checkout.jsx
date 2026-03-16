@@ -84,7 +84,7 @@ const Checkout = () => {
 
       {/* Back to Menu */}
       <button
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/menu")}
         className="back-to-menu-btn"
       >
         ← Back to Menu

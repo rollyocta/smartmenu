@@ -1,24 +1,36 @@
-/* Navbar.css */
+/* Navbar.css - Fresh & Airy Orange Theme */
+
+:root {
+    --primary-orange: #FF7043;    /* Soft but vibrant orange */
+    --deep-orange: #E64A19;       /* Hover state orange */
+    --cream-bg: #FFFFFF;          /* Clean white */
+    --text-main: #2D3436;         /* Dark grey for readability (not black) */
+    --soft-shadow: rgba(0, 0, 0, 0.05);
+}
 
 .navbar {
-    background-color: #1a1a1a; /* Mas madilim para sa premium look */
-    padding: 15px 0;
-    position: sticky;
+    background-color: var(--cream-bg);
+    padding: 16px 0;
+    position: fixed;
     top: 0;
     z-index: 1000;
-    border-bottom: 4px solid #D2691E;
+    height: 70px;
+    width: 100%;
+    /* Subtle shadow imbes na makapal na border */
+    box-shadow: 0 2px 15px var(--soft-shadow);
+    border-bottom: 1px solid rgba(255, 112, 67, 0.1);
 }
 
 .navbar-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* Logo Design */
+/* Logo Design - Minimalist Orange */
 .nav-logo {
     text-decoration: none;
 }
@@ -26,40 +38,48 @@
 .nav-logo h1 {
     margin: 0;
     font-size: 1.5rem;
-    color: #D2691E; /* Cinnamon Orange */
-    font-weight: 800;
+    color: var(--text-main);
+    font-weight: 700;
     letter-spacing: -0.5px;
 }
 
 .nav-logo h1 span {
-    color: #6f4e37; /* Coffee Brown */
-    font-weight: 300;
+    color: var(--primary-orange); /* Orange ang highlight */
+    font-weight: 900;
 }
 
-/* Cart Icon & Badge */
+/* Cart Icon Section */
 .nav-cart-link {
     text-decoration: none;
-    transition: transform 0.2s ease;
+    transition: all 0.2s ease;
+    background: #FFF5F2; /* Very light orange tint */
+    padding: 10px;
+    border-radius: 50%; /* Circle look */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-cart-link:hover {
+    background: #FFE0D6;
+    transform: scale(1.05);
 }
 
 .cart-icon-wrapper {
     position: relative;
-    display: flex;
-    align-items: center;
-    padding: 5px;
 }
 
 .cart-icon {
-    width: 28px;
-    height: 28px;
-    color: #ffffff;
+    width: 24px;
+    height: 24px;
+    color: var(--primary-orange); /* Orange na ang icon mismo */
 }
 
 .cart-badge {
     position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: #e74c3c; /* Red alert */
+    top: -8px;
+    right: -8px;
+    background-color: var(--text-main); /* Dark badge para "Classy" */
     color: white;
     font-size: 0.7rem;
     font-weight: bold;
@@ -69,27 +89,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #F5E6D3; /* Para humiwalay sa icon */
+    border: 2px solid white;
 }
 
-/* Badge Bounce Animation */
+/* Animation */
 .nav-cart-link.bump {
-    transform: scale(1.2);
-}
-
-.nav-cart-link.bump .cart-badge {
-    animation: bounce 0.3s ease-in-out;
+    transform: scale(1.1);
 }
 
 @keyframes bounce {
     0% { transform: scale(1); }
-    50% { transform: scale(1.5); }
+    50% { transform: scale(1.3); }
     100% { transform: scale(1); }
 }
 
-/* Responsive */
 @media (max-width: 480px) {
-    .nav-logo h1 {
-        font-size: 1.2rem;
-    }
+    .nav-logo h1 { font-size: 1.2rem; }
 }

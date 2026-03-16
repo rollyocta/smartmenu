@@ -1,62 +1,173 @@
-/* CategoryTabs.css */
+/* --- Main Sticky Container --- */
+.sticky-header-container {
+    position: sticky;
+    top: 70px; 
+    z-index: 999; 
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 112, 67, 0.1);
+    padding: 15px 0; /* Binawasan ko para mas compact */
+    transition: all 0.3s ease;
+}
 
+/* --- Responsive Flex Wrapper --- */
+.header-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- NEW: Row para sa Search at Cart --- */
+.top-row-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Space sa pagitan ng search at cart */
+    width: 100%;
+}
+
+.search-section {
+    flex: 1; /* Kakainin ng search bar ang lahat ng natitirang space */
+}
+
+/* --- Updated Cart Button Style --- */
+.nav-cart-link {
+    text-decoration: none;
+    background: #FFF5F2; 
+    width: 46px; /* Para pantay ang height sa search input */
+    height: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border: 1.5px solid #FFE0D6;
+    flex-shrink: 0; /* Para hindi mapitpit ang cart sa maliit na screen */
+}
+
+.nav-cart-link:hover {
+    background: #FFE0D6;
+    transform: translateY(-2px);
+}
+
+.cart-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.cart-icon {
+    width: 22px;
+    height: 22px;
+    color: #FF7043;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background-color: #2D3436;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+/* Animation para sa Cart */
+.nav-cart-link.bump {
+    transform: scale(1.15);
+}
+
+/* --- Search Input Styles --- */
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    color: #FF7043;
+    opacity: 0.7;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 16px 12px 45px; /* Dinagdagan ang padding para pantay ang height sa cart */
+    border-radius: 12px;
+    border: 1.5px solid #FFE0D6;
+    background-color: #fcfcfc;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+/* --- Category Tabs --- */
 .tabs-wrapper {
     width: 100%;
-    margin-bottom: 30px;
-    padding: 10px 0;
-    /* Soft shadow sa ilalim para may depth */
-    border-bottom: 1px solid #eee;
+    overflow: hidden;
 }
 
 .tabs-container {
     display: flex;
-    gap: 12px;
-    overflow-x: auto; /* Enable horizontal scroll */
-    padding: 5px 20px;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch; /* Smooth scroll sa iOS */
-}
-
-/* Itago ang scrollbar pero functional pa rin */
-.tabs-container::-webkit-scrollbar {
-    display: none;
-}
-.tabs-container {
-    -ms-overflow-style: none;
+    gap: 10px;
+    overflow-x: auto;
     scrollbar-width: none;
 }
 
-.tab-item {
-    white-space: nowrap; /* Hindi bababa ang text */
-    padding: 10px 24px;
-    border-radius: 50px; /* Pill shape */
-    font-size: 0.95rem;
-    font-weight: 600;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background-color: #F5E6D3;
-    color: #5D4037;
-}
+.tabs-container::-webkit-scrollbar { display: none; }
 
-.tab-item:hover {
-    background-color: #ede0cf;
-    transform: translateY(-2px);
+.tab-item {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: none;
+    background-color: #FFF5F2;
+    color: #FF7043;
+    transition: all 0.2s ease;
 }
 
 .tab-item.active {
-    background-color: #D2691E;
+    background-color: #FF7043;
     color: white;
-    box-shadow: 0 4px 12px rgba(210, 105, 30, 0.3);
+    box-shadow: 0 4px 10px rgba(255, 112, 67, 0.3);
 }
 
-.tab-item:active {
-    transform: scale(0.95);
-}
-
-/* Desktop spacing adjustment */
+/* --- RESPONSIVE ADJUSTMENTS --- */
 @media (min-width: 768px) {
-    .tabs-container {
-        justify-content: center; /* Center tabs sa malalaking screen */
+    .header-content-wrapper {
+        flex-direction: row-reverse; /* Search+Cart sa kanan, Menu sa kaliwa */
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .top-row-wrapper {
+        width: auto;
+        gap: 15px;
+    }
+
+    .search-section {
+        width: 280px;
+    }
+
+    .sticky-header-container {
+        padding: 10px 0;
+        top: 68px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sticky-header-container {
+        top: 56px; 
     }
 }
